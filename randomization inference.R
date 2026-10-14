@@ -141,17 +141,20 @@ perm_test = function(Y_obs, alloc_obs, alloc, contrast = c(1,-1), tau = 0,
   
   
   ## Compute the p value
+  # Statistics such as rank means can equal S_obs exactly in exact arithmetic
+  # yet differ from it in the last bits; count those ties as at least as extreme.
+  tol = sqrt(.Machine$double.eps) * max(1, abs(S_obs))
   if(alternative == "greater")
   {
-    p_value = length(S_perm[S_perm >= S_obs])/length(S_perm)  
+    p_value = length(S_perm[S_perm >= S_obs - tol])/length(S_perm)  
   }
   if(alternative == "less")
   {
-    p_value = length(S_perm[S_perm <= S_obs])/length(S_perm)  
+    p_value = length(S_perm[S_perm <= S_obs + tol])/length(S_perm)  
   }
   if(alternative == "not equal")
   {
-    p_value = length(S_perm[abs(S_perm) >= abs(S_obs)])/length(S_perm)  
+    p_value = length(S_perm[abs(S_perm) >= abs(S_obs) - tol])/length(S_perm)  
   }
   
   return(list(test_stat_obs = S_obs, test_stat_iter = S_perm, p_value = p_value))
