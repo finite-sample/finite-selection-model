@@ -82,14 +82,15 @@ perm_test = function(Y_obs, alloc_obs, alloc, contrast = c(1,-1), tau = 0,
     Y2 = Y_obs
     
     Z_iter = alloc[iter,]
-    # Fill in the missing potential outcomes under sharp null
+    # Fill in the missing potential outcomes under sharp null, using the
+    # observed assignment: Y_obs[i] is the outcome under Z_obs[i].
     for(i in 1:N)
     {
-      if(Z_iter[i] == level[1])
+      if(Z_obs[i] == level[1])
       {
         Y2[i] = (tau - contrast[1]*Y_obs[i])/contrast[2]
       }
-      if(Z_iter[i] == level[2])
+      if(Z_obs[i] == level[2])
       {
         Y1[i] = (tau - contrast[2]*Y_obs[i])/contrast[1]
       }
